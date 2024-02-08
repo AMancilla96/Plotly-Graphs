@@ -1,0 +1,36 @@
+import pandas as pd
+import plotly.graph_objects as go
+import plotly.express as px
+import plotly.offline as pyo
+import numpy as np
+from plotly.subplots import make_subplots
+from dash import Dash, dcc, html, Input, Output
+
+
+df=pd.read_excel(r'Boletin Upiita Autores original.xlsx',sheet_name="Hoja2")
+
+
+instituciones=df[["Institución","No. De publicaciones"]]
+instituciones=instituciones.sort_values(by="No. De publicaciones",ascending=False)
+instituciones=instituciones.drop(instituciones.index[15:])
+fig1 = px.pie(instituciones, values="No. De publicaciones", names="Institución",color="Institución", title='Instituciones con mayor frecuencia de publicación')
+fig1.update_traces(marker=dict(line=dict(color='#000000', width=2)))
+
+fig1.update_layout(
+     title={
+         'text': "Publicaciones por Institución",
+         'x':0.5,
+         'xanchor': 'center',
+         'yanchor': 'top'},
+           font=dict(
+            family="Verdana",
+            size=18,
+     ),
+     paper_bgcolor="rgba(0,0,0,0)", 
+     plot_bgcolor="rgba(0,0,0,0)",
+     font_color="white"
+     )
+
+
+pyo.plot(fig1, filename="instituciones.html")
+
